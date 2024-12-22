@@ -14,6 +14,11 @@ namespace Persistence
         public static async Task SeedData(DataContext context)
         {
 
+            if (!context.Requestors.Any())
+            {
+                context.Requestors.Add(new Requestor { Email = "bob@test.com", FirstName = "bob", LastName = "Smith" });
+            }
+
             if (!context.Projects.Any())
             {
                 context.Projects.Add(new Project { Name = "CMS" });
