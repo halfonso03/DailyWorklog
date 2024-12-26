@@ -33,7 +33,7 @@ namespace Persistence
             modelBuilder.Entity<TaskItem>().Property(x => x.Id).HasColumnName("id");
             modelBuilder.Entity<TaskItem>().Property(x => x.Description).HasColumnName("description");
             modelBuilder.Entity<TaskItem>().Property(x => x.ProjectId).HasColumnName("project_id");
-            modelBuilder.Entity<TaskItem>().Property(x => x.RequestorId).HasColumnName("requestor_id");
+            modelBuilder.Entity<TaskItem>().Property(x => x.RequestorId).HasColumnName("requestor_id").IsRequired(false);
             modelBuilder.Entity<TaskItem>().Property(x => x.HidtaId).HasColumnName("hidta_id");
             modelBuilder.Entity<TaskItem>().Property(x => x.TaskDate).HasColumnName("task_date");
 
@@ -47,7 +47,15 @@ namespace Persistence
             modelBuilder.Entity<Requestor>().Property(x => x.LastName).HasColumnName("last_name");
             modelBuilder.Entity<Requestor>().Property(x => x.Email).HasColumnName("email");
             
+            modelBuilder.Entity<TaskItem>()
+                .HasOne(x => x.Hidta)
+                .WithMany(x => x.TaskItems)
+                .HasForeignKey(x => x.HidtaId);
 
+            modelBuilder.Entity<TaskItem>()
+                .HasOne(x => x.Project)
+                .WithMany(x => x.TaskItems)
+                .HasForeignKey(x => x.ProjectId);
             
 
             base.OnModelCreating(modelBuilder);

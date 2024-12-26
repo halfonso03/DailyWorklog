@@ -4,9 +4,15 @@ import './index.css';
 
 import { RouterProvider } from 'react-router-dom';
 import { router } from './router/routes';
+import LogProvider from './context/LogContext';
+import App from './App';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <LogProvider>
+      <App>
+        <RouterProvider router={router}></RouterProvider>
+      </App>
+    </LogProvider>
   </StrictMode>
 );

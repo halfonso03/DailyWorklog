@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom';
 import App from '../app/layout/App';
 import Dashboard from '../pages/Dashboard';
 import Projects from '../pages/Projects';
+import Tasks from '../pages/Tasks';
 
 export const routes: RouteObject[] = [
   {
@@ -20,6 +21,10 @@ export const routes: RouteObject[] = [
       {
         path: '/projects',
         element: <Projects></Projects>,
+      },
+      {
+        path: '/tasks/:year/:month',
+        element: <Tasks></Tasks>,
       },
     ],
   },

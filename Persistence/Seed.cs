@@ -72,6 +72,43 @@ namespace Persistence
                 context.Hidtas.Add(new Hidta { Name = "West Texas" });
             }
 
+
+            if (!context.TaskItems.Any())
+            {
+                context.TaskItems.Add(new()
+                {
+                    Description = "New Task 1",
+                    HidtaId = 1,
+                    ProjectId = 1,
+                    TaskDate = DateTime.Now,
+                    RequestorId = 1
+                });
+                context.TaskItems.Add(new()
+                {
+                    Description = "New Task 2",
+                    HidtaId = 2,
+                    ProjectId = 2,
+                    TaskDate = DateTime.Now,
+                    RequestorId = 1
+                });
+                context.TaskItems.Add(new()
+                {
+                    Description = "New Task 3",
+                    HidtaId = 3,
+                    ProjectId = 3,
+                    TaskDate = DateTime.Now,
+                    RequestorId = 1
+                });
+                context.TaskItems.Add(new()
+                {
+                    Description = "New Task 4",
+                    HidtaId = 1,
+                    ProjectId = 2,
+                    TaskDate = DateTime.Now,
+                    RequestorId = 1
+                });
+            }
+
             await context.SaveChangesAsync();
 
         }

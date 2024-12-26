@@ -5,7 +5,8 @@ export default function App() {
   return (
     <>
       <NavBar></NavBar>
-      <div className="p-4">
+      <div className="p-4 text-white">
+        {/* <SignupForm></SignupForm> */}
         <Outlet></Outlet>
       </div>
     </>

@@ -1,12 +1,11 @@
 interface Props {
   text: string;
   value: string;
-  selected?: boolean;
 }
 
-export default function Option({ text, value, selected }: Props) {
+export default function Option({ text, value }: Props) {
   return (
-    <option value={value} selected={selected} className="bg-slate-900 text-white">
+    <option value={value} className="bg-slate-900 text-white">
       {text}
     </option>
   );

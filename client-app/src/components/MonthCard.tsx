@@ -1,27 +1,51 @@
+import { Link } from 'react-router-dom';
+import { MonthName } from '../app/utils/formatDate';
+
 interface Props {
-  month: string;
-  items: number;
+  monthName: string;
+  monthIndex: number;
+  itemCount: number;
+  year: number;
 }
 
-export default function MonthCard({ month, items }: Props) {
-  const monthName = new Intl.DateTimeFormat('en-US', {
-    month: 'long',
-  }).format(new Date());
+export default function MonthCard({
+  monthIndex,
+  monthName,
+  itemCount,
+  year,
+}: Props) {
+  const currentMonthName = MonthName(new Date());
 
   return (
-    <div className="w-1/5 cursor-pointer relative  ">
-      {monthName === month && (
-        <div className="absolute min-h-2 bg-slate-400 top-0 left-0 w-full rounded-t-md"></div>
-      )}
+    <Link
+      to={`/tasks/${year}/${monthIndex}`}
+      className="cursor-pointer relative w-[24%] mb-2"
+    >
+      <div>
+        {currentMonthName === monthName && (
+          <div
+            className="absolute bg-slate-400 top-0 left-0 w-full rounded-t-sm"
+            style={{ minHeight: '.5rem' }}
+          ></div>
+        )}
 
-      <div className={`flex justify-between border border-slate-700 rounded-md w-full p-4 hover:transition-all duration-300 hover:bg-slate-800 ${monthName == month ? 'border-slate-400' : '' }`}>
-        <div className={monthName === month ? 'font-semibold' : ''}>
-          {month}
-        </div>
-        <div className={monthName === month ? 'font-semibold' : ''}>
-          {items}
+        <div
+          className={`flex justify-between border border-slate-700 rounded-sm w-full p-4 hover:transition-all duration-300 hover:bg-slate-800 ${
+            currentMonthName == monthName ? 'border-slate-400' : ''
+          }`}
+        >
+          <div
+            className={currentMonthName === monthName ? 'font-semibold' : ''}
+          >
+            {monthName}
+          </div>
+          <div
+            className={currentMonthName === monthName ? 'font-semibold' : ''}
+          >
+            {itemCount}
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
