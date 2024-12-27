@@ -37,7 +37,7 @@ const StyledHeader = styled(CommonRow).attrs({
 const StyledRow = styled(CommonRow).attrs({
   className: 'MY_TABLE_ROW ',
 })`
-  :nth-last-child(-n + 5) {
+  :nth-last-child(-n + 6) {
     border-bottom: 0;
   }
 `;

@@ -8,7 +8,7 @@ export default function Projects() {
   useEffect(() => {
     async function get() {
       const response = await axios.get('http://localhost:5000/api/project');
-      console.log(response.data);
+      // console.log(response.data);
       setProjects(response.data);
     }
 

@@ -34,8 +34,6 @@ export default function FormatDate(date: Date | string) {
 }
 
 export function MonthName(date: Date) {
-
-
     return new Intl.DateTimeFormat('en-US', {
         month: 'long',
     }).format(date);

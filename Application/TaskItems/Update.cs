@@ -26,10 +26,10 @@ namespace Application.TaskItems
 
             public Handler(DataContext context, IMapper mapper)
             {
-            _mapper = mapper;
+                _mapper = mapper;
                 _context = context;
-
             }
+            
             public async Task Handle(Command request, CancellationToken cancellationToken)
             {
                 var taskFromDb = await _context.TaskItems.FindAsync(request.TaskItem.Id);

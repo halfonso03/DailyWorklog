@@ -5,9 +5,11 @@ export default function App() {
   return (
     <>
       <NavBar></NavBar>
-      <div className="p-4 text-white">
+      <div className="flex w-full justify-center text-white">
         {/* <SignupForm></SignupForm> */}
-        <Outlet></Outlet>
+        <div className='w-4/5'>
+          <Outlet></Outlet>
+        </div>
       </div>
     </>
   );

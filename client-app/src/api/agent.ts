@@ -46,7 +46,12 @@ const TaskItems = {
         return response;
     },
     summary: (year: number) => requests.get<MonthlySummaryItem[]>(`http://localhost:5000/api/taskitem/monthlySummary?year=${year}`),
-    create: (taskItem: TaskItem) => requests.post('http://localhost:5000/api/taskitem/', taskItem),
+    create: async (taskItem: TaskItem) => {
+        const response = await requests.post('http://localhost:5000/api/taskitem/', taskItem);
+        return response;
+    },
+    update: (taskItem: TaskItem) => requests.put(`http://localhost:5000/api/taskitem/${taskItem.id}`, taskItem),
+    delete: (id: number) => requests.del(`http://localhost:5000/api/taskitem/${id}`)
 }
 
 

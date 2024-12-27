@@ -14,14 +14,17 @@ interface Props {
 }
 
 export default function Textarea(props: Props) {
-  const [field, meta, {setValue}] = useField(props.name);
+  const [field, meta, { setValue }] = useField(props.name);
 
   let classes =
-    'w-3/4 bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-sm block p-2 dark:bg-slate-900 dark:border-slate-700 dark:placeholder-gray-400 dark:text-white focus:border-blue-600';
+    'w-3/4 bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded-sm block p-2 dark:bg-slate-950  dark:placeholder-gray-400 dark:text-white focus:border-blue-600';
 
   if (meta.touched && meta.error) {
     classes += ` ${props.validationclasses}`;
+  } else {
+    classes += ' dark:border-slate-700';
   }
+
   useEffect(() => {
     setValue(props.value);
   }, [props.value, setValue]);
