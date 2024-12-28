@@ -12,9 +12,10 @@ namespace Domain
         public DateTime TaskDate { get; set; }     
         public int HidtaId { get; set; }
         public int ProjectId { get; set; }
-        public int? RequestorId { get; set; }
+        public int RequestorId { get; set; }
         public Hidta Hidta { get; set; }
         public Project Project { get; set; }
+        public Requestor Requestor { get; set; }
         
     }
 }

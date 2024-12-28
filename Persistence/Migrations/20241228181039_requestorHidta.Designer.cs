@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241224011033_requestorNullable")]
-    partial class requestorNullable
+    [Migration("20241228181039_requestorHidta")]
+    partial class requestorHidta
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,23 +65,32 @@ namespace Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("email");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("first_name");
 
+                    b.Property<int>("HidtaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("last_name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HidtaId");
 
                     b.ToTable("tblRequestor", (string)null);
                 });
@@ -107,7 +116,7 @@ namespace Persistence.Migrations
                         .HasColumnType("int")
                         .HasColumnName("project_id");
 
-                    b.Property<int?>("RequestorId")
+                    b.Property<int>("RequestorId")
                         .HasColumnType("int")
                         .HasColumnName("requestor_id");
 
@@ -121,7 +130,20 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ProjectId");
 
+                    b.HasIndex("RequestorId");
+
                     b.ToTable("tblTaskItem", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Requestor", b =>
+                {
+                    b.HasOne("Domain.Hidta", "Hidta")
+                        .WithMany("Requestors")
+                        .HasForeignKey("HidtaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Hidta");
                 });
 
             modelBuilder.Entity("Domain.TaskItem", b =>
@@ -138,17 +160,32 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Requestor", "Requestor")
+                        .WithMany("TaskItems")
+                        .HasForeignKey("RequestorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Hidta");
 
                     b.Navigation("Project");
+
+                    b.Navigation("Requestor");
                 });
 
             modelBuilder.Entity("Domain.Hidta", b =>
                 {
+                    b.Navigation("Requestors");
+
                     b.Navigation("TaskItems");
                 });
 
             modelBuilder.Entity("Domain.Project", b =>
+                {
+                    b.Navigation("TaskItems");
+                });
+
+            modelBuilder.Entity("Domain.Requestor", b =>
                 {
                     b.Navigation("TaskItems");
                 });

@@ -16,7 +16,7 @@ namespace Application.TaskItems
         public int RequestorId { get; set; }
         public string Hidta { get; set; }
         public string Project { get; set; }
-        // public Hidta Hidta { get; set; }
-        // public Project Project { get; set; }
+        public string RequestorName { get; set; }
+        public string RequestorEmail { get; set; }
     }
 }

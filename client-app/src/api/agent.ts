@@ -6,6 +6,7 @@ import { MonthlySummaryItem } from "../models/MonthlySummaryItem";
 import { TaskItem } from "../models/TaskItem";
 import { Project } from "../models/Project";
 import { Hidta } from "../models/Hidta";
+import { Requestor } from "../models/Requestor";
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -48,7 +49,7 @@ const TaskItems = {
     summary: (year: number) => requests.get<MonthlySummaryItem[]>(`http://localhost:5000/api/taskitem/monthlySummary?year=${year}`),
     create: async (taskItem: TaskItem) => {
         const response = await requests.post('http://localhost:5000/api/taskitem/', taskItem);
-        return response;
+        return response as TaskItem;
     },
     update: (taskItem: TaskItem) => requests.put(`http://localhost:5000/api/taskitem/${taskItem.id}`, taskItem),
     delete: (id: number) => requests.del(`http://localhost:5000/api/taskitem/${id}`)
@@ -63,11 +64,16 @@ const Hidtas = {
     get: () => requests.get<Hidta[]>('http://localhost:5000/api/hidta')
 };
 
+const Requestors = {
+    get: (hidtaId: number) => requests.get<Requestor[]>(`http://localhost:5000/api/requestor?hidtaId=${hidtaId}`)
+}
+
 
 const agent = {
     TaskItems,
     Projects,
-    Hidtas
+    Hidtas,
+    Requestors
 };
 
 export default agent;

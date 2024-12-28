@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Domain;
-using Microsoft.Identity.Client;
 
 namespace Persistence
 {
@@ -28,7 +23,7 @@ namespace Persistence
                 context.Projects.Add(new Project { Name = "IPSS" });                
                 context.Projects.Add(new Project { Name = "Other" });
 
-                await context.SaveChangesAsync();
+                
             }
 
             if (!context.Hidtas.Any())
@@ -55,13 +50,13 @@ namespace Persistence
                 context.Hidtas.Add(new Hidta { Name = "New England" });
                 context.Hidtas.Add(new Hidta { Name = "New Mexico" });
                 context.Hidtas.Add(new Hidta { Name = "New York - New Jersey" });
-                context.Hidtas.Add(new Hidta { Name = "Non-HIDTA" });
                 context.Hidtas.Add(new Hidta { Name = "North Central" });
                 context.Hidtas.Add(new Hidta { Name = "North Florida" });
                 context.Hidtas.Add(new Hidta { Name = "Northern California" });
                 context.Hidtas.Add(new Hidta { Name = "Northwest" });
                 context.Hidtas.Add(new Hidta { Name = "Ohio" });
                 context.Hidtas.Add(new Hidta { Name = "Oregon - Idaho" });
+                context.Hidtas.Add(new Hidta { Name = "ONDCP" });
                 context.Hidtas.Add(new Hidta { Name = "Puerto Rico - Virgin Islands" });
                 context.Hidtas.Add(new Hidta { Name = "Rocky Mountain" });
                 context.Hidtas.Add(new Hidta { Name = "San Diego-Imperial Valley" });
@@ -72,44 +67,45 @@ namespace Persistence
                 context.Hidtas.Add(new Hidta { Name = "West Texas" });
             }
 
-
-            if (!context.TaskItems.Any())
-            {
-                context.TaskItems.Add(new()
-                {
-                    Description = "New Task 1",
-                    HidtaId = 1,
-                    ProjectId = 1,
-                    TaskDate = DateTime.Now,
-                    RequestorId = 1
-                });
-                context.TaskItems.Add(new()
-                {
-                    Description = "New Task 2",
-                    HidtaId = 2,
-                    ProjectId = 2,
-                    TaskDate = DateTime.Now,
-                    RequestorId = 1
-                });
-                context.TaskItems.Add(new()
-                {
-                    Description = "New Task 3",
-                    HidtaId = 3,
-                    ProjectId = 3,
-                    TaskDate = DateTime.Now,
-                    RequestorId = 1
-                });
-                context.TaskItems.Add(new()
-                {
-                    Description = "New Task 4",
-                    HidtaId = 1,
-                    ProjectId = 2,
-                    TaskDate = DateTime.Now,
-                    RequestorId = 1
-                });
-            }
-
             await context.SaveChangesAsync();
+
+            // if (!context.TaskItems.Any())
+            // {
+            //     context.TaskItems.Add(new()
+            //     {
+            //         Description = "New Task 1",
+            //         HidtaId = 1,
+            //         ProjectId = 1,
+            //         TaskDate = DateTime.Now,
+            //         RequestorId = 1
+            //     });
+            //     context.TaskItems.Add(new()
+            //     {
+            //         Description = "New Task 2",
+            //         HidtaId = 2,
+            //         ProjectId = 2,
+            //         TaskDate = DateTime.Now,
+            //         RequestorId = 1
+            //     });
+            //     context.TaskItems.Add(new()
+            //     {
+            //         Description = "New Task 3",
+            //         HidtaId = 3,
+            //         ProjectId = 3,
+            //         TaskDate = DateTime.Now,
+            //         RequestorId = 1
+            //     });
+            //     context.TaskItems.Add(new()
+            //     {
+            //         Description = "New Task 4",
+            //         HidtaId = 1,
+            //         ProjectId = 2,
+            //         TaskDate = DateTime.Now,
+            //         RequestorId = 1
+            //     });
+            // }
+
+           
 
         }
     }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, useEffect, useRef } from 'react';
 import Option from './Option';
 
 export interface DropdownProps {
@@ -12,10 +12,13 @@ export interface DropdownProps {
   disabled?: boolean;
   additionalclasses?: string;
   defaultoption?: { value: string; text: string };
+  focus?: boolean;
 }
 
 export default function Select(props: DropdownProps) {
   const { options, defaultoption } = props;
+
+  const ref = useRef<HTMLSelectElement | null>(null);
 
   if (defaultoption?.value) {
     if (!options.some((x) => x.value === '0')) {
@@ -29,8 +32,14 @@ export default function Select(props: DropdownProps) {
     classNames += ' ' + props.additionalclasses;
   }
 
+  // this doesn't work
+  useEffect(() => {
+    if (props.focus) {
+      ref.current!.focus();
+    }
+  }, [props.focus]);
   return (
-    <select {...props} className={classNames}>
+    <select {...props} className={classNames} ref={ref}>
       {options.map((o) => (
         <Option key={o.value} text={o.text} value={o.value}></Option>
       ))}

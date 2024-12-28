@@ -21,7 +21,7 @@ export default function ConfirmDelete({ taskItem }: Props) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex align-baseline gap-3 mt-3 mb-4">
+      <div className="flex align-baseline gap-3 mb-4">
         <FaExclamationTriangle className="text-yellow-500 text-2xl"></FaExclamationTriangle>
         <div className="font-semibold text-xl">
           Click OK to delete the task:
@@ -37,7 +37,7 @@ export default function ConfirmDelete({ taskItem }: Props) {
         <div>Project:</div>
         <div>{taskItem.project}</div>
       </div>
-      <div className="flex justify-end gap-2 mt-4">
+      <div className="flex justify-end gap-2 mt-4 mb-2">
         <button
           onClick={handleDelete}
           disabled={isDeleting}

@@ -19,8 +19,10 @@ export type LogContextType = {
   getSortedTasks: () => TaskItem[];
   deleteTask: (id: number) => void;
   isDeleting: boolean;
+  // getRequestors: (hidtaId: number) => void
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const LogContext = createContext<LogContextType | null>(null);
 
 const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -57,11 +59,26 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   async function createTask(values: TaskItemFormValues) {
-    const newId = await agent.TaskItems.create(new TaskItem(values));
-    const newTask = { ...new TaskItem(values), id: newId } as TaskItem;
+    const shapedTask =
+      values.requestorName?.trim() !== ''
+        ? {
+            ...values,
+            requestor: {
+              firstName: values.requestorName?.split(' ')[0],
+              lastName: values.requestorName?.split(' ')[1],
+              email: values.requestorEmail,
+            },
+          }
+        : {
+            ...values,
+          };
+
+    const createdTask = await agent.TaskItems.create(shapedTask);
+    const newTask = { ...new TaskItem(values), id: createdTask.id };
 
     newTask.hidta = hidtas.find((x) => x.id == newTask.hidtaId)?.name;
     newTask.project = projects.find((x) => x.id == newTask.projectId)?.name;
+
     setSortedTasks([...tasks, newTask]);
   }
 
@@ -102,6 +119,10 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     }
   }
 
+  // async function getRequestors(hidtaId: number) {
+  //   return agent.Requestors.get(hidtaId);
+  // }
+
   const loadTasks = useCallback(async function loadTasks(
     year: number,
     month: number
@@ -128,6 +149,7 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     setTasks(sortedTasks);
   }
+
   useEffect(() => {
     loadProjects();
     loadHidtas();
@@ -150,7 +172,8 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         setSelectedTask,
         getSortedTasks,
         deleteTask,
-        isDeleting
+        isDeleting,
+        // getRequestors
       }}
     >
       {children}

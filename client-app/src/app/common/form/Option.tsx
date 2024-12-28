@@ -1,11 +1,14 @@
 interface Props {
   text: string;
   value: string;
+  className? :string
 }
 
-export default function Option({ text, value }: Props) {
+export default function Option({ text, value, className }: Props) {
+
+  
   return (
-    <option value={value} className="bg-slate-900 text-white">
+    <option value={value} className={className}>
       {text}
     </option>
   );

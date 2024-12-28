@@ -15,5 +15,8 @@ namespace Domain
 
         [EmailAddress]
         public string Email { get; set; }
+        public int HidtaId { get; set; }
+        public Hidta Hidta { get; set; }
+        public ICollection<TaskItem> TaskItems { get; set; }
     }
 }

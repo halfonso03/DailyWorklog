@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241223191524_taskItemToProjHidta")]
-    partial class taskItemToProjHidta
+    [Migration("20241227212800_seconMigration")]
+    partial class seconMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,19 +65,23 @@ namespace Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("email");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("first_name");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("last_name");
 
@@ -121,6 +125,8 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ProjectId");
 
+                    b.HasIndex("RequestorId");
+
                     b.ToTable("tblTaskItem", (string)null);
                 });
 
@@ -138,9 +144,17 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Requestor", "Requestor")
+                        .WithMany("TaskItems")
+                        .HasForeignKey("RequestorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Hidta");
 
                     b.Navigation("Project");
+
+                    b.Navigation("Requestor");
                 });
 
             modelBuilder.Entity("Domain.Hidta", b =>
@@ -149,6 +163,11 @@ namespace Persistence.Migrations
                 });
 
             modelBuilder.Entity("Domain.Project", b =>
+                {
+                    b.Navigation("TaskItems");
+                });
+
+            modelBuilder.Entity("Domain.Requestor", b =>
                 {
                     b.Navigation("TaskItems");
                 });

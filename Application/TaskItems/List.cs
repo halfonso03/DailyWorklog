@@ -37,6 +37,7 @@ namespace Application.TaskItems
                                 .TaskItems
                                 .Include(p => p.Project)
                                 .Include(h => h.Hidta)
+                                .Include(r => r.Requestor)
                                 .Where(x => x.TaskDate.Year == request.Year)
                                 .ProjectTo<TaskItemDto>(_mapper.ConfigurationProvider)
                                 .AsQueryable();

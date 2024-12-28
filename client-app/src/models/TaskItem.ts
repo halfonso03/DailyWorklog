@@ -4,6 +4,7 @@ export interface ITaskItem {
     taskDate: Date | null
     hidtaId: number;
     projectId: number;
+    requestorId: number;
     description: string;
     hidta?: string;
     project?: string;
@@ -15,6 +16,7 @@ export class TaskItem implements ITaskItem {
     taskDate: Date | null;
     hidtaId: number;
     projectId: number;
+    requestorId: number;
     description: string;
     hidta?: string;
     project?: string;
@@ -26,6 +28,7 @@ export class TaskItem implements ITaskItem {
         this.hidtaId = init.hidtaId ? +init.hidtaId : 0;
         this.projectId = init.projectId ? +init.projectId : 0;
         this.description = init.description;
+        this.requestorId = init.requestorId;
     }
 }
 
@@ -34,7 +37,10 @@ export class TaskItemFormValues {
     description: string = '';
     hidtaId: number = 0;
     projectId: number = 0;
+    requestorId: number = 0;
     taskDate: Date | null = null;
+    requestorName: string | null = '';
+    requestorEmail: string | null = '';
 
 
     constructor(taskItem?: TaskItem) {
@@ -44,6 +50,7 @@ export class TaskItemFormValues {
             this.projectId = taskItem.projectId;
             this.taskDate = taskItem.taskDate;
             this.description = taskItem.description;
+            this.requestorId = taskItem.requestorId
         } else {
             this.taskDate = new Date();
         }

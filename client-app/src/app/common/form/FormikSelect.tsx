@@ -1,16 +1,42 @@
+import { ChangeEvent, SyntheticEvent, useEffect, useRef } from 'react';
 import { useField } from 'formik';
-import Select, { DropdownProps } from './Select';
-import { useEffect } from 'react';
 
-export default function FormikSelect(props: DropdownProps) {
-  const { name, options, onBlur, defaultoption, disabled, additionalclasses } =
-    props;
+export interface DropdownProps2 {
+  name: string;
+  options: { value: string; text: string }[];
+  label?: string;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLSelectElement>) => void | undefined;
+  onBlur?: (e: SyntheticEvent<HTMLElement>) => void;
+  disabled?: boolean;
+  additionalclasses?: string;
+  defaultoption?: { value: string; text: string };
+  focus?: boolean;
+}
+
+export default function FormikSelect(props: DropdownProps2) {
+  const {
+    name,
+    options,
+    onBlur,
+    defaultoption,
+    disabled,
+    additionalclasses,
+    onChange,
+  } = props;
   const [field, meta, { setValue }] = useField(props);
+  const ref = useRef<HTMLSelectElement | null>(null);
 
-  let classes = '';
+  let classNames = `w-full outline-none bg-gray-50 border border-slate-700 text-gray-900 text-sm rounded-sm block p-2 dark:bg-transparent  dark:placeholder-gray-400 dark:text-white focus:border-blue-600`;
 
   if (meta.touched && meta.error) {
-    classes = ` ${additionalclasses}`;
+    classNames += ` ${additionalclasses}`;
+  }
+
+  if (defaultoption?.value) {
+    if (!options.some((x) => x.value === '0')) {
+      options.unshift(defaultoption);
+    }
   }
 
   useEffect(() => {
@@ -19,21 +45,27 @@ export default function FormikSelect(props: DropdownProps) {
 
   return (
     <>
-      <Select
+      <select
         name={name}
         value={field.value}
-        options={options}
         disabled={disabled}
-        additionalclasses={classes}
-        defaultoption={defaultoption}
-        onChange={(e) => {
-          setValue((e.target as HTMLSelectElement).value);
-        }}
+        ref={ref}
+        className={classNames}
+        onChange={onChange}
         onBlur={onBlur}
-      ></Select>
-      {/* {meta.touched && meta.error ? (
-        <label className="mt-1">{meta.error}</label>
-      ) : null} */}
+      >
+        {options.map((o) => {
+          let className = 'bg-slate-900 text-white';
+          if (+o.value === -1) {
+            className = ' bg-slate-700 italic opacity-90 text-slate-100 py-6';
+          }
+          return (
+            <option key={o.value} value={o.value} className={className}>
+              <div className={className}>{o.text}</div>
+            </option>
+          );
+        })}
+      </select>
     </>
   );
 }
