@@ -8,7 +8,7 @@ import Textarea from '../app/common/form/Textarea';
 import FormikSelect from '../app/common/form/FormikSelect';
 import { useLogContext } from '../context/useLogContext';
 import { TaskItem, TaskItemFormValues } from '../models/TaskItem';
-import Modal, { ModalContext, ModalContextType } from '../pages/Modal';
+import Modal, { useModalContext } from '../pages/Modal';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import { Requestor } from '../models/Requestor';
@@ -20,13 +20,17 @@ interface Props {
 }
 
 const TaskItemForm = ({ taskItem, onAdded }: Props) => {
-  const { projects, hidtas, createTask, setSelectedTask, updateTask } =
-    useLogContext();
+  const {
+    projects,
+    hidtas,
+    createTask,
+    selectedTask,
+    setSelectedTask,
+    updateTask,
+  } = useLogContext();
+  const context = useModalContext();
 
   const [newRequestor, setNewRequestor] = useState(false);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const context = useContext<ModalContextType>(ModalContext as any);
   const [saveSuccessfull, setSaveSuccessFull] = useState(false);
   const [requestors, setRequestors] = useState<
     { value: string; text: string }[]
@@ -65,6 +69,10 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
   });
 
   async function handleLoadRequestors(hidtaId: number) {
+    loadRequestors(hidtaId);
+  }
+
+  function loadRequestors(hidtaId: number) {
     agent.Requestors.get(hidtaId).then((response) => {
       const req = response.map((r) => ({
         value: r.id.toString(),
@@ -73,13 +81,6 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
 
       setRequestors([{ value: '-1', text: 'Add Requestor' }, ...req]);
     });
-
-    // setRequestors((prev) => [
-    //   ...response,
-    //   { value: '-1', text: 'Add Requestor ', email: '' },
-    // ]);
-
-    // console.log(response);
   }
 
   useEffect(() => {
@@ -95,8 +96,11 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
   }, [saveSuccessfull]);
 
   useEffect(() => {
-    return () => setSelectedTask(undefined);
-  }, [setSelectedTask]);
+    // setSelectedTask(taskItem);
+    if (taskItem) {
+      loadRequestors(taskItem.hidtaId);
+    }
+  }, [taskItem]);
 
   return (
     <div className="w-full my-6">
@@ -107,12 +111,12 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
           onSubmit={async (values, { setSubmitting }) => {
             try {
               console.log(values);
-              if (values.id !== 0) {
-                // updateTask(values);
-              } else {
-                createTask(values);
-              }
-              onAdded?.();
+              // if (values.id !== 0) {
+              //   // updateTask(values);
+              // } else {
+              //   createTask(values);
+              // }
+              // onAdded?.();
               setSaveSuccessFull(true);
               context.close();
             } catch (error) {
@@ -146,6 +150,7 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
                 <div className="flex justify-between m-1">
                   <div className="text-gray-200 p-1 w-1/4">HIDTA</div>
                   <div className="w-3/4">
+                    {selectedTask && <pre>{JSON.stringify(selectedTask)}</pre>}
                     <FormikSelect
                       name="hidtaId"
                       focus={true}
@@ -189,7 +194,7 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
                     <div className="w-full">
                       <FormikSelect
                         name="requestorId"
-                        value={initialValues.projectId.toString()}
+                        value={initialValues.requestorId.toString()}
                         disabled={isSubmitting}
                         onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                           setFieldValue('requestorId', e.target.value);

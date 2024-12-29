@@ -55,10 +55,10 @@ namespace Persistence
                 .WithMany(x => x.TaskItems)
                 .HasForeignKey(x => x.ProjectId);
 
-             modelBuilder.Entity<TaskItem>()
-                .HasOne(x => x.Requestor)
-                .WithMany(x => x.TaskItems)
-                .HasForeignKey(x => x.RequestorId);
+            modelBuilder.Entity<TaskItem>()
+               .HasOne(x => x.Requestor)
+               .WithMany(x => x.TaskItems)
+               .HasForeignKey(x => x.RequestorId);
 
             modelBuilder.Entity<Requestor>()
                 .HasOne(x => x.Hidta)

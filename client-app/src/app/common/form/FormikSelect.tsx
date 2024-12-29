@@ -61,7 +61,7 @@ export default function FormikSelect(props: DropdownProps2) {
           }
           return (
             <option key={o.value} value={o.value} className={className}>
-              <div className={className}>{o.text}</div>
+              {o.text}
             </option>
           );
         })}

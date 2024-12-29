@@ -22,7 +22,17 @@ namespace Application.Core
                     o => o.MapFrom(d => d.Requestor.FirstName + " " + d.Requestor.LastName))
                 .ForMember(s => s.RequestorEmail,
                     o => o.MapFrom(d => d.Requestor.Email));
-                
+
+
+            CreateMap<TaskItemDto, TaskItem>()
+                    .ForMember(s => s.Description,
+                        o => o.MapFrom(d => d.Description))
+                    .ForMember(s => s.TaskDate,
+                        o => o.MapFrom(d => d.TaskDate))
+                    .ForMember(s => s.Requestor, o => o.Ignore())
+                    .ForMember(s => s.Project, o => o.Ignore())
+                    .ForMember(s => s.Hidta, o => o.Ignore());       
+            
 
             CreateMap<MonthlySummaryDto, MonthlySummaryDto>();
         }

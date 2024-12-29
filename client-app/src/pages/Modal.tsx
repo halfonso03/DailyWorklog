@@ -175,3 +175,8 @@ Modal.Window = Window;
 Modal.Close = Close;
 
 export default Modal;
+
+export function useModalContext() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return useContext<ModalContextType>(ModalContext as any);
+}
