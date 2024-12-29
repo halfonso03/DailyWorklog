@@ -84,19 +84,32 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   async function updateTask(values: TaskItemFormValues) {
     try {
+      
+      if (values.requestorId <= -1) {
+        values.requestorId = 0;
+      }
+
       const updatedTask = {
-        ...new TaskItemFormValues(values),
+        ...values,
         hidtaId: +values.hidtaId,
         projectId: +values.projectId,
       };
 
-      await agent.TaskItems.update(updatedTask);
+
+      const response = await agent.TaskItems.update(updatedTask);
+
+
+      console.log(response);
+
 
       const taskItem = {
         ...new TaskItem(values),
         hidta: hidtas.find((x) => x.id == +values.hidtaId)?.name,
         project: projects.find((x) => x.id == +values.projectId)?.name,
+        requestorId: response.requestorId
       };
+
+      console.log(taskItem);
 
       const existingTasks = [...tasks.filter((t) => t.id !== values.id)];
       existingTasks.push(taskItem);

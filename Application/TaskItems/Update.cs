@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Core;
@@ -40,54 +42,55 @@ namespace Application.TaskItems
 
                 if (taskFromDb.HidtaId == request.TaskItemDto.HidtaId)
                 {
-                    if (taskFromDb.RequestorId == request.TaskItemDto.RequestorId)
+                    if (dto.RequestorId == 0)   // new  requestor
                     {
-                        _mapper.Map(dto, taskFromDb);                    
-                        await _context.SaveChangesAsync();
+                        _mapper.Map(dto, taskFromDb);
+
+                        taskFromDb.RequestorId = 0;
+                        taskFromDb.Requestor = new()
+                        {
+                            FirstName = dto.RequestorName.Trim().Split(" ")[0],
+                            LastName = dto.RequestorName.Trim().Split(" ")[1],
+                            Email = dto.RequestorEmail.Trim(),
+                            HidtaId = dto.HidtaId
+                        };                        
                     }
                     else
                     {
-                        if (dto.RequestorId == 0)   // new  requestor
-                        {
-                            taskFromDb.RequestorId = 0;
-                            taskFromDb.Requestor = new()
-                            {
-                                FirstName = dto.RequestorName.Trim().Split(" ")[0],
-                                LastName = dto.RequestorName.Trim().Split(" ")[1],
-                                Email = dto.RequestorEmail.Trim(),
-                                HidtaId = dto.HidtaId
-                            };
+                        _mapper.Map(dto, taskFromDb);
+                    }
+                }
+                else
+                {
+                    if (dto.RequestorId != 0)   // different hidta, existing  requestor
+                    {
+                        _mapper.Map(dto, taskFromDb);
+                    }
+                    else
+                    {
+                        _mapper.Map(dto, taskFromDb);
 
-                            await _context.SaveChangesAsync();
-                        }
-                        else
+                        taskFromDb.RequestorId = 0;
+                        taskFromDb.Requestor = new()
                         {
-                            _mapper.Map(dto, taskFromDb);
-                            await _context.SaveChangesAsync();
-                        }
+                            FirstName = dto.RequestorName.Trim().Split(" ")[0],
+                            LastName = dto.RequestorName.Trim().Split(" ")[1],
+                            Email = dto.RequestorEmail.Trim(),
+                            HidtaId = dto.HidtaId
+                        };
                     }
                 }
 
-                // if (taskFromDb.HidtaId != taskFromDb.Requestor.HidtaId)
-                // {
 
-                //     if (await _context.Requestors.AnyAsync(x => x.HidtaId == taskFromDb.HidtaId && x.Email == taskFromDb.Requestor.Email, cancellationToken))
-                //     {
-                //         var existingRequestor =
-                //             await _context.Requestors.FirstAsync(x => x.HidtaId == taskFromDb.HidtaId && x.Email == taskFromDb.Requestor.Email, cancellationToken);
-
-                //         taskFromDb.Requestor = existingRequestor;
-                //     }
-                //     else
-                //     {
-
-                //     }
-
-                // }
-
-                // await _context.SaveChangesAsync();
-
-                // var taskItemDto = _mapper.Map<TaskItem, TaskItemDto>(request.TaskItemDto);
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (System.Exception ex)
+                {
+                    return Result<TaskItemDto>.Failure($"Error updating task. Message: {ex.Message}");
+                }
+                
 
                 var taskItemDto = _mapper.Map<TaskItem, TaskItemDto>(taskFromDb);
 

@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, useFormik } from 'formik';
 import { DatePickerField } from '../app/common/form/DatepickerField';
 import * as Yup from 'yup';
 import { FaCheck } from 'react-icons/fa';
@@ -25,13 +25,14 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
     hidtas,
     createTask,
     selectedTask,
-    setSelectedTask,
     updateTask,
   } = useLogContext();
   const context = useModalContext();
 
   const [newRequestor, setNewRequestor] = useState(false);
   const [saveSuccessfull, setSaveSuccessFull] = useState(false);
+  //const formik = useFormik();
+
   const [requestors, setRequestors] = useState<
     { value: string; text: string }[]
   >([]);
@@ -96,7 +97,6 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
   }, [saveSuccessfull]);
 
   useEffect(() => {
-    // setSelectedTask(taskItem);
     if (taskItem) {
       loadRequestors(taskItem.hidtaId);
     }
@@ -105,14 +105,15 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
   return (
     <div className="w-full my-6">
       <div className="w-full">
+        {initialValues.id}
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              console.log(values);
+              //console.log(values);
               // if (values.id !== 0) {
-              //   // updateTask(values);
+              updateTask(values);
               // } else {
               //   createTask(values);
               // }
@@ -159,6 +160,7 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
                       disabled={isSubmitting}
                       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                         setFieldValue('hidtaId', e.target.value);
+                        setFieldValue('requestorId', 0);
                         handleLoadRequestors(+e.target.value);
                       }}
                       defaultoption={{ value: '0', text: 'Choose a HIDTA' }}

@@ -51,7 +51,7 @@ const TaskItems = {
         const response = await requests.post('http://localhost:5000/api/taskitem/', taskItem);
         return response as TaskItem;
     },
-    update: (taskItem: TaskItem) => requests.put(`http://localhost:5000/api/taskitem/${taskItem.id}`, taskItem),
+    update: (taskItem: TaskItem) => requests.put<TaskItem>(`http://localhost:5000/api/taskitem/${taskItem.id}`, taskItem),
     delete: (id: number) => requests.del(`http://localhost:5000/api/taskitem/${id}`)
 }
 
