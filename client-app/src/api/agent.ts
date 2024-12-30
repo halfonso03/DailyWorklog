@@ -8,18 +8,21 @@ import { Project } from "../models/Project";
 import { Hidta } from "../models/Hidta";
 import { Requestor } from "../models/Requestor";
 
+
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const sleep = (delay: number) => { return new Promise(resolve => setTimeout(resolve, delay)) }
 
 
 axios.interceptors.request.use(async config => {
-    // await sleep(200);
+    // await sleep(500);
     return config
 });
 
 axios.interceptors.response.use(async response => {
-    await sleep(600);
+    if (import.meta.env.DEV) await sleep(1000);
     return response;
 }, (error: AxiosError) => {
 
@@ -42,24 +45,24 @@ const requests = {
 }
 
 const TaskItems = {
-    get: async (year: number, month: number) =>  await requests.get<TaskItem[]>(`http://localhost:5000/api/taskitem?year=${year}&month=${month}`),
-    summary: (year: number) => requests.get<MonthlySummaryItem[]>(`http://localhost:5000/api/taskitem/monthlySummary?year=${year}`),
-    create: async (taskItem: TaskItem) => await requests.post<TaskItem>('http://localhost:5000/api/taskitem/', taskItem),
-    update: (taskItem: TaskItemFormValues) => requests.put<TaskItem>(`http://localhost:5000/api/taskitem/${taskItem.id}`, taskItem),
-    delete: (id: number) => requests.del(`http://localhost:5000/api/taskitem/${id}`)
+    get: async (year: number, month: number) => await requests.get<TaskItem[]>(`/taskitem?year=${year}&month=${month}`),
+    summary: (year: number) => requests.get<MonthlySummaryItem[]>(`/taskitem/monthlySummary?year=${year}`),
+    create: async (taskItem: TaskItem) => await requests.post<TaskItem>('/taskitem/', taskItem),
+    update: (taskItem: TaskItemFormValues) => requests.put<TaskItem>(`/taskitem/${taskItem.id}`, taskItem),
+    delete: (id: number) => requests.del(`/taskitem/${id}`)
 }
 
 
 const Projects = {
-    get: () => requests.get<Project[]>('http://localhost:5000/api/project')
+    get: () => requests.get<Project[]>('/project')
 };
 
 const Hidtas = {
-    get: () => requests.get<Hidta[]>('http://localhost:5000/api/hidta')
+    get: () => requests.get<Hidta[]>('/hidta')
 };
 
 const Requestors = {
-    get: (hidtaId: number) => requests.get<Requestor[]>(`http://localhost:5000/api/requestor?hidtaId=${hidtaId}`)
+    get: (hidtaId: number) => requests.get<Requestor[]>(`/requestor?hidtaId=${hidtaId}`)
 }
 
 

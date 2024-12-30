@@ -24,18 +24,10 @@ export default function NavButtons({ currentDate }: Props) {
           <div className="p-1 text-xl">
             <FaArrowLeftLong></FaArrowLeftLong>
           </div>
-          {/* <div>
-            {MonthNameFromOrdinal(prevMonth)} {prevYear}
-          </div> */}
         </div>
-      </Link>
-      {/* <span className="opacity-70">|</span> */}
-
+      </Link>      
       <Link to={`/tasks/${nextYear}/${nextMonthNav}`}>
         <div className="flex align-middle gap-1 text-slate-300">
-          {/* <div>
-            {MonthNameFromOrdinal(nextMonth)} {nextYear}
-          </div> */}
           <div className="p-1 text-xl">
             <FaArrowRightLong></FaArrowRightLong>
           </div>

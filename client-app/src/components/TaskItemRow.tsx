@@ -9,37 +9,42 @@ import { FaEdit } from 'react-icons/fa';
 import ConfirmDelete from './ConfirmDelete';
 
 interface Props {
-  taskItem: TaskItemFormValues;
+  taskItemFormValues: TaskItemFormValues;
 }
-export default function TaskItemRow({ taskItem }: Props) {
+
+export default function TaskItemRow({ taskItemFormValues }: Props) {
   return (
     <>
       <Table.Cell>
         <div className="flex gap-3 cursor-pointer opacity-80">
-          <Modal.Open opens={taskItem.id.toString()}>
+          <Modal.Open opens={taskItemFormValues.id.toString()}>
             <button>
               <FaEdit></FaEdit>
             </button>
           </Modal.Open>
-          <Modal.Window name={taskItem.id.toString()} $size="medium">
-            <TaskItemForm taskItem={taskItem as TaskItem}></TaskItemForm>
-
+          <Modal.Window name={taskItemFormValues.id.toString()} $size="medium">
+            <TaskItemForm
+              taskItem={taskItemFormValues as TaskItem}
+            ></TaskItemForm>
           </Modal.Window>
-          <Modal.Open opens={taskItem.id.toString() + '_delete'}>
+          <Modal.Open opens={taskItemFormValues.id.toString() + '_delete'}>
             <button className="text-red-500">
               <FaTrash></FaTrash>
             </button>
           </Modal.Open>
-          <Modal.Window name={taskItem.id.toString() + '_delete'} $size="small">
-            <ConfirmDelete taskItem={taskItem}></ConfirmDelete>
+          <Modal.Window
+            name={taskItemFormValues.id.toString() + '_delete'}
+            $size="small"
+          >
+            <ConfirmDelete taskItem={taskItemFormValues}></ConfirmDelete>
           </Modal.Window>
         </div>
       </Table.Cell>
-      <Table.Cell>{FormatDate(taskItem.taskDate!)}</Table.Cell>
-      <Table.Cell>{taskItem.description}</Table.Cell>
-      <Table.Cell>{(taskItem as TaskItem).hidta}</Table.Cell>
-      <Table.Cell>{(taskItem as TaskItem).project}</Table.Cell>
-      <Table.Cell>{taskItem.requestorName}</Table.Cell>
+      <Table.Cell>{FormatDate(taskItemFormValues.taskDate!)}</Table.Cell>
+      <Table.Cell>{taskItemFormValues.description}</Table.Cell>
+      <Table.Cell>{(taskItemFormValues as TaskItem).hidta}</Table.Cell>
+      <Table.Cell>{(taskItemFormValues as TaskItem).project}</Table.Cell>
+      <Table.Cell>{taskItemFormValues.requestorName}</Table.Cell>
     </>
   );
 }

@@ -4,6 +4,9 @@ import tailwindcss from "tailwindcss";
 
 // https://vite.dev/config/
 export default defineConfig({
+  build: {
+    outDir: '../API/wwwroot/'
+  },
   server: {
     port: 3001
   },

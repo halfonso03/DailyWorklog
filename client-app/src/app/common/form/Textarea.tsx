@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 interface Props {
   name: string;
-  value: string;
+  value: string | null;
   placeholder?: string;
   rows: number;
   disabled: boolean;

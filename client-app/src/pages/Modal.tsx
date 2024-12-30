@@ -107,6 +107,7 @@ interface WindowProps {
   $size: string;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const ModalContext = createContext<ModalContextType | undefined>(
   undefined
 );
@@ -131,6 +132,7 @@ function Open({ children, opens: opensWindowName }: OpenProps) {
 
   return cloneElement(children as any, {
     onClick: () => {
+      console.log('clicking')
       open(opensWindowName as string);
     },
   });
@@ -179,7 +181,7 @@ Modal.Close = Close;
 
 export default Modal;
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useModalContext() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return useContext<ModalContextType>(ModalContext as any);
 }

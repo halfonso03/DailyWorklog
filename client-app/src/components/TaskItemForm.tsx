@@ -18,19 +18,19 @@ import HelperTags from './HelperTags';
 interface Props {
   taskItem?: TaskItem;
   onAdded?: () => void;
+  defaultDate?: Date | null;
 }
 
-const TaskItemForm = ({ taskItem, onAdded }: Props) => {
+const TaskItemForm = ({ taskItem, onAdded, defaultDate }: Props) => {
   const { projects, hidtas, createTask, selectedTask, updateTask } =
     useLogContext();
   const context = useModalContext();
-
   const [newRequestor, setNewRequestor] = useState(false);
   const [saveSuccessfull, setSaveSuccessFull] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(
-    taskItem ? taskItem.taskDate : new Date()
+    taskItem ? taskItem.taskDate : defaultDate ? defaultDate : new Date()
   );
-  //const formik = useFormik();
+
 
   const [requestors, setRequestors] = useState<
     { value: string; text: string }[]
