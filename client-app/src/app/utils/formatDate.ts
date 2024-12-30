@@ -33,8 +33,18 @@ export default function FormatDate(date: Date | string) {
 
 }
 
-export function MonthName(date: Date) {
+export function MonthNameFromDate(date: Date) {
     return new Intl.DateTimeFormat('en-US', {
         month: 'long',
     }).format(date);
+}
+
+
+export function MonthNameFromOrdinal(month: number) {
+
+    const newDate = new Date(`${month + 1}/1/${2024}`);
+
+    return new Intl.DateTimeFormat('en-US', {
+        month: 'long',
+    }).format(newDate);
 }

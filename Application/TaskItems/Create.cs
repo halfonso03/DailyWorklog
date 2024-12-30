@@ -7,6 +7,7 @@ using Application.Core;
 using AutoMapper;
 using Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.TaskItems
@@ -31,7 +32,9 @@ namespace Application.TaskItems
 
             public async Task<Result<TaskItemDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                _context.TaskItems.Add(request.TaskItem);
+                var newTask = request.TaskItem;
+
+                _context.TaskItems.Add(newTask);
                 
 
                 if (request.TaskItem.Requestor?.Id == 0)
@@ -40,6 +43,14 @@ namespace Application.TaskItems
                 }
 
                 await _context.SaveChangesAsync();
+
+
+                if (newTask.Requestor == null)
+                {
+                    var req = await _context.Requestors.FirstAsync(r => r.Id == newTask.RequestorId);
+
+                    newTask.Requestor = req;
+                }
 
                 var taskItemDto = _mapper.Map<TaskItem, TaskItemDto>(request.TaskItem);
 

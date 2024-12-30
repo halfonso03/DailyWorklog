@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MonthName } from '../app/utils/formatDate';
+import { MonthNameFromDate } from '../app/utils/formatDate';
 
 interface Props {
   monthName: string;
@@ -14,7 +14,7 @@ export default function MonthCard({
   itemCount,
   year,
 }: Props) {
-  const currentMonthName = MonthName(new Date());
+  const currentMonthName = MonthNameFromDate(new Date());
 
   return (
     <Link

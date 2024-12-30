@@ -150,9 +150,12 @@ function Window({ children, name, $size }: WindowProps) {
   const context = useContext<ModalContextType | undefined>(ModalContext as any);
   const ref = useOutsideClick(context?.close);
 
+  
   if (name !== context!.openName) {
     return null;
   }
+
+  console.log(name, context!.openName)
 
   return createPortal(
     <Overlay>

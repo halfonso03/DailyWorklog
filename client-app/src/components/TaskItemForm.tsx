@@ -1,5 +1,5 @@
-import { ChangeEvent, useContext, useEffect, useState } from 'react';
-import { Field, Form, Formik, useFormik } from 'formik';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { Field, Form, Formik } from 'formik';
 import { DatePickerField } from '../app/common/form/DatepickerField';
 import * as Yup from 'yup';
 import { FaCheck } from 'react-icons/fa';
@@ -9,10 +9,11 @@ import FormikSelect from '../app/common/form/FormikSelect';
 import { useLogContext } from '../context/useLogContext';
 import { TaskItem, TaskItemFormValues } from '../models/TaskItem';
 import Modal, { useModalContext } from '../pages/Modal';
+import { HelperOptions } from '../app/utils/helperOptions';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import { Requestor } from '../models/Requestor';
 import agent from '../api/agent';
+import HelperTags from './HelperTags';
 
 interface Props {
   taskItem?: TaskItem;
@@ -20,17 +21,15 @@ interface Props {
 }
 
 const TaskItemForm = ({ taskItem, onAdded }: Props) => {
-  const {
-    projects,
-    hidtas,
-    createTask,
-    selectedTask,
-    updateTask,
-  } = useLogContext();
+  const { projects, hidtas, createTask, selectedTask, updateTask } =
+    useLogContext();
   const context = useModalContext();
 
   const [newRequestor, setNewRequestor] = useState(false);
   const [saveSuccessfull, setSaveSuccessFull] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    taskItem ? taskItem.taskDate : new Date()
+  );
   //const formik = useFormik();
 
   const [requestors, setRequestors] = useState<
@@ -102,22 +101,25 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
     }
   }, [taskItem]);
 
+  function handleDateChange(d: Date | null) {
+    setSelectedDate(d);
+  }
   return (
     <div className="w-full my-6">
       <div className="w-full">
-        {initialValues.id}
+        {/* {initialValues.id} */}
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={async (values, { setSubmitting }) => {
             try {
               //console.log(values);
-              // if (values.id !== 0) {
-              updateTask(values);
-              // } else {
-              //   createTask(values);
-              // }
-              // onAdded?.();
+              if (values.id !== 0) {
+                updateTask(values);
+              } else {
+                createTask(values);
+              }
+              onAdded?.();
               setSaveSuccessFull(true);
               context.close();
             } catch (error) {
@@ -134,7 +136,6 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
             setFieldValue,
             errors,
             touched,
-            resetForm,
           }) => (
             <>
               {/* <pre>{JSON.stringify(errors)}</pre> */}
@@ -144,8 +145,9 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
                   <div className="text-gray-200 p-1 w-1/4">Date</div>
                   <DatePickerField
                     name="taskDate"
-                    initialValue={initialValues.taskDate}
+                    initialValue={selectedDate}
                     disabled={isSubmitting}
+                    onChange={handleDateChange}
                   ></DatePickerField>
                 </div>
                 <div className="flex justify-between m-1">
@@ -253,12 +255,23 @@ const TaskItemForm = ({ taskItem, onAdded }: Props) => {
                 <div className="flex justify-between m-1">
                   <div className="text-gray-200 p-1">Description</div>
                   <Textarea
-                    rows={3}
+                    rows={2}
                     value={initialValues.description}
                     name="description"
                     disabled={isSubmitting}
                     validationclasses="dark:border-red-600"
                   ></Textarea>
+                </div>
+                <div>
+                  <HelperTags
+                    helperTags={HelperOptions}
+                    onHelperClick={(key: string) =>
+                      setFieldValue(
+                        'description',
+                        HelperOptions.find((x) => x.key === key)?.value
+                      )
+                    }
+                  ></HelperTags>
                 </div>
                 <div className="flex gap-3 justify-end m-1 my-4">
                   {/* <div>{isSubmitting}</div> */}

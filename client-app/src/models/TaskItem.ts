@@ -8,6 +8,7 @@ export interface ITaskItem {
     description: string;
     hidta?: string;
     project?: string;
+    requestorName?: string;
 }
 
 export class TaskItem implements ITaskItem {
@@ -20,6 +21,7 @@ export class TaskItem implements ITaskItem {
     description: string;
     hidta?: string;
     project?: string;
+    requestorName?: string = '';
 
 
     constructor(init: TaskItemFormValues) {

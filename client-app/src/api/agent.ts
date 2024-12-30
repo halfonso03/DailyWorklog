@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { MonthlySummaryItem } from "../models/MonthlySummaryItem";
-import { TaskItem } from "../models/TaskItem";
+import { TaskItem, TaskItemFormValues } from "../models/TaskItem";
 import { Project } from "../models/Project";
 import { Hidta } from "../models/Hidta";
 import { Requestor } from "../models/Requestor";
@@ -42,16 +42,10 @@ const requests = {
 }
 
 const TaskItems = {
-    get: async (year: number, month: number) => {
-        const response = await requests.get<TaskItem[]>(`http://localhost:5000/api/taskitem?year=${year}&month=${month}`);
-        return response;
-    },
+    get: async (year: number, month: number) =>  await requests.get<TaskItem[]>(`http://localhost:5000/api/taskitem?year=${year}&month=${month}`),
     summary: (year: number) => requests.get<MonthlySummaryItem[]>(`http://localhost:5000/api/taskitem/monthlySummary?year=${year}`),
-    create: async (taskItem: TaskItem) => {
-        const response = await requests.post('http://localhost:5000/api/taskitem/', taskItem);
-        return response as TaskItem;
-    },
-    update: (taskItem: TaskItem) => requests.put<TaskItem>(`http://localhost:5000/api/taskitem/${taskItem.id}`, taskItem),
+    create: async (taskItem: TaskItem) => await requests.post<TaskItem>('http://localhost:5000/api/taskitem/', taskItem),
+    update: (taskItem: TaskItemFormValues) => requests.put<TaskItem>(`http://localhost:5000/api/taskitem/${taskItem.id}`, taskItem),
     delete: (id: number) => requests.del(`http://localhost:5000/api/taskitem/${id}`)
 }
 

@@ -19,6 +19,7 @@ export type LogContextType = {
   getSortedTasks: () => TaskItem[];
   deleteTask: (id: number) => void;
   isDeleting: boolean;
+  getTasksForYearMonth: (year: number, month: number) => TaskItem[];
   // getRequestors: (hidtaId: number) => void
 };
 
@@ -63,6 +64,7 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       values.requestorName?.trim() !== ''
         ? {
             ...values,
+            requestorName: '',
             requestor: {
               firstName: values.requestorName?.split(' ')[0],
               lastName: values.requestorName?.split(' ')[1],
@@ -71,20 +73,25 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           }
         : {
             ...values,
+            requestorName: '',
           };
 
-    const createdTask = await agent.TaskItems.create(shapedTask);
-    const newTask = { ...new TaskItem(values), id: createdTask.id };
+    const response = await agent.TaskItems.create(shapedTask);
 
-    newTask.hidta = hidtas.find((x) => x.id == newTask.hidtaId)?.name;
-    newTask.project = projects.find((x) => x.id == newTask.projectId)?.name;
+    const newTask: TaskItem = {
+      ...values,
+      id: response.id,
+      requestorId: response.requestorId,
+      hidta: hidtas.find((x) => x.id == response.hidtaId)?.name,
+      project: projects.find((x) => x.id == response.projectId)?.name,
+      requestorName: response.requestorName,
+    };
 
     setSortedTasks([...tasks, newTask]);
   }
 
   async function updateTask(values: TaskItemFormValues) {
     try {
-      
       if (values.requestorId <= -1) {
         values.requestorId = 0;
       }
@@ -95,24 +102,21 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         projectId: +values.projectId,
       };
 
-
       const response = await agent.TaskItems.update(updatedTask);
-
-
-      console.log(response);
-
 
       const taskItem = {
         ...new TaskItem(values),
         hidta: hidtas.find((x) => x.id == +values.hidtaId)?.name,
         project: projects.find((x) => x.id == +values.projectId)?.name,
-        requestorId: response.requestorId
+        requestorId: response.requestorId,
+        requestorName: response.requestorName,
       };
 
       console.log(taskItem);
 
       const existingTasks = [...tasks.filter((t) => t.id !== values.id)];
       existingTasks.push(taskItem);
+
       setSortedTasks(existingTasks);
     } catch (error) {
       console.log(error);
@@ -135,6 +139,10 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // async function getRequestors(hidtaId: number) {
   //   return agent.Requestors.get(hidtaId);
   // }
+
+  function getTasksForYearMonth(year: number, month: number) {
+    return tasks.filter(t => t.taskDate?.getFullYear() ==  year && t.taskDate.getMonth() === (month - 1)); 
+  }
 
   const loadTasks = useCallback(async function loadTasks(
     year: number,
@@ -186,6 +194,7 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         getSortedTasks,
         deleteTask,
         isDeleting,
+        getTasksForYearMonth
         // getRequestors
       }}
     >

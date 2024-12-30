@@ -1,5 +1,5 @@
 import FormatDate from '../app/utils/formatDate';
-import { TaskItem } from '../models/TaskItem';
+import { TaskItem, TaskItemFormValues } from '../models/TaskItem';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import Modal, { ModalContext, ModalContextType } from '../pages/Modal';
 import { useLogContext } from '../context/useLogContext';
@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { FaSpinner } from 'react-icons/fa6';
 
 interface Props {
-  taskItem: TaskItem;
+  taskItem: TaskItemFormValues;
 }
 export default function ConfirmDelete({ taskItem }: Props) {
   const { isDeleting, deleteTask } = useLogContext();
@@ -33,9 +33,9 @@ export default function ConfirmDelete({ taskItem }: Props) {
         <div>Description:</div>
         <div>{taskItem.description}</div>
         <div>HIDTA:</div>
-        <div>{taskItem.hidta}</div>
+        <div>{(taskItem as TaskItem).hidta}</div>
         <div>Project:</div>
-        <div>{taskItem.project}</div>
+        <div>{(taskItem as TaskItem).project}</div>
       </div>
       <div className="flex justify-end gap-2 mt-4 mb-2">
         <button

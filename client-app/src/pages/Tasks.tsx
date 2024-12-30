@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import TaskList from '../components/TaskList';
-import { MonthName } from '../app/utils/formatDate';
+import { MonthNameFromDate } from '../app/utils/formatDate';
 
 function Tasks() {
   const params = useParams();
@@ -8,7 +8,7 @@ function Tasks() {
   const month = params.month;
   const year = params.year;
 
-  const monthName = MonthName(new Date(`${month}/1/${year}`));
+  const monthName = MonthNameFromDate(new Date(`${month}/1/${year}`));
 
   return (
     <>

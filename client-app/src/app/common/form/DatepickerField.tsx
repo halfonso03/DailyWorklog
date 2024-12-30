@@ -9,6 +9,7 @@ interface Props {
   name: string;
   disabled: boolean;
   initialValue: Date | null;
+  onChange: (newDate: Date | null) => void;
 }
 
 export const DatePickerField = ({
@@ -16,6 +17,7 @@ export const DatePickerField = ({
   disabled,
   initialValue,
   props,
+  onChange,
 }: Props) => {
   // const { setFieldValue } = useFormikContext();
   const [field, , { setValue }] = useField(name);
@@ -34,6 +36,7 @@ export const DatePickerField = ({
       selected={field.value}
       onChange={(val) => {
         setValue(val);
+        onChange(val);
       }}
       className="w-full outline-none rounded-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm block p-2 dark:bg-transparent dark:border-slate-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
       wrapperClassName="w-3/4 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

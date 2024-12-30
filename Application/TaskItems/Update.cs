@@ -62,11 +62,9 @@ namespace Application.TaskItems
                 }
                 else
                 {
-                    if (dto.RequestorId != 0)   // different hidta, existing  requestor
-                    {
-                        _mapper.Map(dto, taskFromDb);
-                    }
-                    else
+                     _mapper.Map(dto, taskFromDb);
+
+                    if (dto.RequestorId == 0)   // different hidta, existing  requestor
                     {
                         _mapper.Map(dto, taskFromDb);
 
@@ -90,7 +88,15 @@ namespace Application.TaskItems
                 {
                     return Result<TaskItemDto>.Failure($"Error updating task. Message: {ex.Message}");
                 }
-                
+
+
+
+                if (taskFromDb.Requestor == null)
+                {
+                    var req = await _context.Requestors.FirstAsync(r => r.Id == taskFromDb.RequestorId);
+
+                    taskFromDb.Requestor = req;
+                }
 
                 var taskItemDto = _mapper.Map<TaskItem, TaskItemDto>(taskFromDb);
 

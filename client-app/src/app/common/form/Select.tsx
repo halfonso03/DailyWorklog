@@ -26,7 +26,7 @@ export default function Select(props: DropdownProps) {
     }
   }
 
-  let classNames = `w-full outline-none bg-gray-50 border border-slate-700 text-gray-900 text-sm rounded-sm block p-2 dark:bg-transparent  dark:placeholder-gray-400 dark:text-white focus:border-blue-600`;
+  let classNames = `w-full outline-none bg-gray-50 border border-slate-700 text-gray-900 text-sm rounded-sm block p-2 bg-slate-900 text-white  dark:placeholder-gray-400 dark:text-white focus:border-blue-600`;
 
   if (props.additionalclasses) {
     classNames += ' ' + props.additionalclasses;

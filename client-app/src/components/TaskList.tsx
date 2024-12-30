@@ -8,12 +8,15 @@ import { useLogContext } from '../context/useLogContext';
 import { ClipLoader } from 'react-spinners';
 import Modal from '../pages/Modal';
 import TaskItemForm from './TaskItemForm';
+import NavButtons from './NavButtons';
 
 export default function TaskList() {
   const params = useParams();
-  const { tasks, loadTasks, loadingTasks } = useLogContext();
+  const month = +params!.month!;
+  const year = +params!.year!;
 
-  // let tasks = getSortedTasks();
+  const { tasks, loadTasks, loadingTasks, getTasksForYearMonth } =
+    useLogContext();
 
   useEffect(() => {
     loadTasks(+params!.year!, +params!.month!);
@@ -21,8 +24,6 @@ export default function TaskList() {
   }, [loadTasks, params, params.month, params.year]);
 
   if (!tasks) return <div>No data</div>;
-
-  // if (loadingTasks) return <div>Loading...</div>;
 
   return (
     <>
@@ -37,13 +38,14 @@ export default function TaskList() {
           <>
             <Modal>
               <Modal.Open opens="add">
-                <div className="flex justify-end mb-4">
+                <div className="flex justify-between mb-4">
                   <button
                     type="button"
                     className="w-1/12 min-h-0.5 p-1 rounded-sm font-semibold text-black hover:text-black hover:bg-slate-100 bg-slate-200"
                   >
                     Add Task
                   </button>
+                  <NavButtons currentDate={`${month}/1/${year}`}></NavButtons>
                 </div>
               </Modal.Open>
               <Modal.Window name="add" $size="medium">
@@ -61,7 +63,7 @@ export default function TaskList() {
                   <Table.Cell>Requestor</Table.Cell>
                 </Table.Header>
                 <Table.Body
-                  data={tasks}
+                  data={getTasksForYearMonth(+params!.year!, +params!.month!)}
                   render={(taskItem: TaskItem) => (
                     <TaskItemRow
                       key={taskItem.id}

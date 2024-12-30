@@ -1,7 +1,7 @@
 import { FaTrash } from 'react-icons/fa6';
 import Table from '../app/common/ui/Table';
 import FormatDate from '../app/utils/formatDate';
-import { TaskItem } from '../models/TaskItem';
+import { TaskItem, TaskItemFormValues } from '../models/TaskItem';
 
 import Modal from '../pages/Modal';
 import TaskItemForm from './TaskItemForm';
@@ -9,7 +9,7 @@ import { FaEdit } from 'react-icons/fa';
 import ConfirmDelete from './ConfirmDelete';
 
 interface Props {
-  taskItem: TaskItem;
+  taskItem: TaskItemFormValues;
 }
 export default function TaskItemRow({ taskItem }: Props) {
   return (
@@ -22,7 +22,7 @@ export default function TaskItemRow({ taskItem }: Props) {
             </button>
           </Modal.Open>
           <Modal.Window name={taskItem.id.toString()} $size="medium">
-            <TaskItemForm taskItem={taskItem}></TaskItemForm>
+            <TaskItemForm taskItem={taskItem as TaskItem}></TaskItemForm>
 
           </Modal.Window>
           <Modal.Open opens={taskItem.id.toString() + '_delete'}>
@@ -37,9 +37,9 @@ export default function TaskItemRow({ taskItem }: Props) {
       </Table.Cell>
       <Table.Cell>{FormatDate(taskItem.taskDate!)}</Table.Cell>
       <Table.Cell>{taskItem.description}</Table.Cell>
-      <Table.Cell>{taskItem.hidta}</Table.Cell>
-      <Table.Cell>{taskItem.project}</Table.Cell>
-      <Table.Cell>requestor</Table.Cell>
+      <Table.Cell>{(taskItem as TaskItem).hidta}</Table.Cell>
+      <Table.Cell>{(taskItem as TaskItem).project}</Table.Cell>
+      <Table.Cell>{taskItem.requestorName}</Table.Cell>
     </>
   );
 }
