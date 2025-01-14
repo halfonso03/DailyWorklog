@@ -11,7 +11,7 @@ export interface DropdownProps2 {
   disabled?: boolean;
   additionalclasses?: string;
   defaultoption?: { value: string; text: string };
-  focus?: boolean;
+  focus?: boolean | null;
 }
 
 export default function FormikSelect(props: DropdownProps2) {
@@ -23,7 +23,10 @@ export default function FormikSelect(props: DropdownProps2) {
     disabled,
     additionalclasses,
     onChange,
+    focus,
   } = props;
+
+
   const [field, meta, { setValue }] = useField(props);
   const ref = useRef<HTMLSelectElement | null>(null);
 
@@ -41,7 +44,10 @@ export default function FormikSelect(props: DropdownProps2) {
 
   useEffect(() => {
     setValue(props.value);
-  }, [props.value, setValue]);
+    if (focus) {
+      ref.current!.focus();
+    }
+  }, [focus, props.value, setValue]);
 
   return (
     <>

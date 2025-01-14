@@ -14,7 +14,9 @@ export default function TaskList() {
   const params = useParams();
   const month = +params!.month!;
   const year = +params!.year!;
-  const defaultDate = new Date(`${month}/1/${year}`);
+  const defaultDate = new Date();
+
+  //`${month}/1/${year}`
 
   const { tasks, loadTasks, getTasksForYearMonth } = useLogContext();
 

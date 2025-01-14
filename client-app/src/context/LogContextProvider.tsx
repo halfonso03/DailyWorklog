@@ -1,30 +1,9 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Project } from '../models/Project';
 import { Hidta } from '../models/Hidta';
 import agent from '../api/agent';
 import { TaskItem, TaskItemFormValues } from '../models/TaskItem';
-
-export type LogContextType = {
-  projects: Project[];
-  hidtas: Hidta[];
-  tasks: TaskItem[];
-  loadingTasks: boolean;
-  loadProjects: () => void;
-  loadHidtas: () => void;
-  createTask: (taskItem: TaskItemFormValues) => void;
-  updateTask: (taskItem: TaskItemFormValues) => void;
-  loadTasks: (year: number, month: number) => void;
-  selectedTask: TaskItem | undefined;
-  setSelectedTask: (taskItem: TaskItem | undefined) => void;
-  getSortedTasks: () => TaskItem[];
-  deleteTask: (id: number) => void;
-  isDeleting: boolean;
-  getTasksForYearMonth: (year: number, month: number) => TaskItem[];
-  // getRequestors: (hidtaId: number) => void
-};
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const LogContext = createContext<LogContextType | null>(null);
+import { LogContext } from './LogContext';
 
 const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -112,8 +91,6 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         requestorName: response.requestorName,
       };
 
-      console.log(taskItem);
-
       const existingTasks = [...tasks.filter((t) => t.id !== values.id)];
       existingTasks.push(taskItem);
 
@@ -135,10 +112,6 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       setIsDeleting(false);
     }
   }
-
-  // async function getRequestors(hidtaId: number) {
-  //   return agent.Requestors.get(hidtaId);
-  // }
 
   function getTasksForYearMonth(year: number, month: number) {
     return tasks.filter(t => t.taskDate?.getFullYear() ==  year && t.taskDate.getMonth() === (month - 1)); 
@@ -195,8 +168,7 @@ const LogProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         deleteTask,
         isDeleting,
         getTasksForYearMonth
-        // getRequestors
-      }}
+            }}
     >
       {children}
     </LogContext.Provider>
