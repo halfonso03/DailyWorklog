@@ -12,9 +12,26 @@ export default function TaskList() {
   const params = useParams();
   const month = params!.month!;
   const year = params!.year!;
-  const defaultDate = new Date();  
+  const defaultDate = new Date();
   const { tasks, isLoading } = useTasks(year, month);
-  
+
+  function getDistinctHidtas(tasks: TaskItem[] | undefined) {
+    if (!tasks) return null;
+
+    const hidtas = tasks?.map((x) => x.hidta).sort() as string[];
+    const distinctHidtas = getDistinct(hidtas).reduce((acc, curr) => acc + curr + ', ', '');    
+
+    return distinctHidtas.substring(0, distinctHidtas.length - 2);
+  }
+
+  function getDistinct(items: string[] | undefined) {
+    const distinctItems = [];
+    for (const item of items!) {
+      if (distinctItems.indexOf(item) === -1) distinctItems.push(item);
+    }
+    return distinctItems;
+  }
+
   if (isLoading)
     return (
       <div className="m-auto w-full flex justify-center my-8 ">
@@ -24,6 +41,7 @@ export default function TaskList() {
   return (
     <>
       <div className="w-full">
+        <div className='mb-3'>{getDistinctHidtas(tasks)}</div>
         <>
           <Modal>
             <Modal.Open opens="add">

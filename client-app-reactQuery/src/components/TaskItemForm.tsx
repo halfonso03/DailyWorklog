@@ -43,6 +43,13 @@ const TaskItemForm = ({ taskItem, onAdded, defaultDate }: Props) => {
   const { isCreating, created, createTask } = useCreateTask();
   const { isUpdating, updated, updateTask } = useUpdateTask();
 
+  let updatedRequestors = requestors
+    ? [
+        { value: '-1', text: 'Add Requestor' },
+        ...(requestors as { value: string; text: string }[]),
+      ]
+    : [];
+
   let initialValues: TaskItemFormValues = {
     id: 0,
     taskDate: new Date(),
@@ -224,7 +231,7 @@ const TaskItemForm = ({ taskItem, onAdded, defaultDate }: Props) => {
                           }}
                           options={
                             requestors
-                              ? requestors!.map((p) => ({
+                              ? updatedRequestors!.map((p) => ({
                                   value: p.value.toString(),
                                   text: p.text,
                                 }))

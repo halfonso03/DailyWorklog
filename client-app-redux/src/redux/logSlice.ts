@@ -116,6 +116,16 @@ export const logSlice = createSlice({
 })
 
 
+function setSortedTasks(tasks: TaskItem[]) {
+    const sortedTasks = Array.of<TaskItem>();
+    tasks.forEach((t) => {
+      sortedTasks.push({ ...t, taskDate: new Date(t.taskDate!) });
+    });
+    sortedTasks.sort((a, b) => a.taskDate!.valueOf() - b.taskDate!.valueOf());
+
+    setTasks(sortedTasks);
+  }
+
 //async function createTask(values: TaskItemFormValues) {
 // const shapedTask =
 //     values.requestorName?.trim() !== ''
