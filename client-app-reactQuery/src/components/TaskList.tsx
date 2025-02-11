@@ -46,9 +46,8 @@ export default function TaskList() {
     );
   return (
     <>
-      {sortbyValue}
       <div className="w-full">
-        <div className="mb-3">{getDistinctHidtas(tasks)}</div>
+        {/* <div className="mb-3">{getDistinctHidtas(tasks)}</div> */}
         <>
           <Modal>
             <Modal.Open opens="add">
