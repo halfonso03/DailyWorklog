@@ -7,19 +7,25 @@ import TaskItemForm from './TaskItemForm';
 import NavButtons from './NavButtons';
 import { FaSpinner } from 'react-icons/fa6';
 import { useTasks } from '../api/useTasks';
+import SortBySelector from './SortBySelector';
+import { useState } from 'react';
 
 export default function TaskList() {
+  const [sortbyValue, setSortbyValue] = useState('date');
   const params = useParams();
   const month = params!.month!;
   const year = params!.year!;
   const defaultDate = new Date();
-  const { tasks, isLoading } = useTasks(year, month);
+  const { tasks, isLoading } = useTasks(year, month, sortbyValue);
 
   function getDistinctHidtas(tasks: TaskItem[] | undefined) {
     if (!tasks) return null;
 
     const hidtas = tasks?.map((x) => x.hidta).sort() as string[];
-    const distinctHidtas = getDistinct(hidtas).reduce((acc, curr) => acc + curr + ', ', '');    
+    const distinctHidtas = getDistinct(hidtas).reduce(
+      (acc, curr) => acc + curr + ', ',
+      ''
+    );
 
     return distinctHidtas.substring(0, distinctHidtas.length - 2);
   }
@@ -40,8 +46,9 @@ export default function TaskList() {
     );
   return (
     <>
+      {sortbyValue}
       <div className="w-full">
-        <div className='mb-3'>{getDistinctHidtas(tasks)}</div>
+        <div className="mb-3">{getDistinctHidtas(tasks)}</div>
         <>
           <Modal>
             <Modal.Open opens="add">
@@ -61,11 +68,46 @@ export default function TaskList() {
             <Table columns=".35fr .5fr 1fr .8fr .8fr 1fr">
               <Table.Header>
                 <Table.Cell></Table.Cell>
-                <Table.Cell>Date</Table.Cell>
-                <Table.Cell>Description</Table.Cell>
-                <Table.Cell>Hidta</Table.Cell>
-                <Table.Cell>Project</Table.Cell>
-                <Table.Cell>Requestor</Table.Cell>
+                <Table.Cell>
+                  <SortBySelector
+                    label="DATE"
+                    value="date"
+                    currentSortValue={sortbyValue}
+                    setSortbyValue={setSortbyValue}
+                  ></SortBySelector>
+                </Table.Cell>
+                <Table.Cell>
+                  <SortBySelector
+                    label="Description"
+                    value="desc"
+                    currentSortValue={sortbyValue}
+                    setSortbyValue={setSortbyValue}
+                  ></SortBySelector>
+                </Table.Cell>
+                <Table.Cell>
+                <SortBySelector
+                    label="HIDTA"
+                    value="hidta"
+                    currentSortValue={sortbyValue}
+                    setSortbyValue={setSortbyValue}
+                  ></SortBySelector>
+                </Table.Cell>
+                <Table.Cell>
+                <SortBySelector
+                    label="Project"
+                    value="project"
+                    currentSortValue={sortbyValue}
+                    setSortbyValue={setSortbyValue}
+                  ></SortBySelector>
+                </Table.Cell>
+                <Table.Cell>
+                <SortBySelector
+                    label="Requestor"
+                    value="requestor"
+                    currentSortValue={sortbyValue}
+                    setSortbyValue={setSortbyValue}
+                  ></SortBySelector>
+                </Table.Cell>
               </Table.Header>
               <Table.Body
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

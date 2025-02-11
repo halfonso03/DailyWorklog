@@ -43,7 +43,7 @@ const TaskItemForm = ({ taskItem, onAdded, defaultDate }: Props) => {
   const { isCreating, created, createTask } = useCreateTask();
   const { isUpdating, updated, updateTask } = useUpdateTask();
 
-  let updatedRequestors = requestors
+  const updatedRequestors = requestors
     ? [
         { value: '-1', text: 'Add Requestor' },
         ...(requestors as { value: string; text: string }[]),

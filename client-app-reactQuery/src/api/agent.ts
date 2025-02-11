@@ -45,7 +45,7 @@ const requests = {
 }
 
 const TaskItems = {
-    get: async (year: number, month: number) => await requests.get<TaskItem[]>(`/taskitem?year=${year}&month=${month}`),
+    get: async (year: number, month: number, sortBy: string) => await requests.get<TaskItem[]>(`/taskitem?year=${year}&month=${month}&sortBy=${sortBy}`),
     summary: async (year: number) => requests.get<MonthlySummaryItem[]>(`/taskitem/monthlySummary?year=${year}`),
     create: async (taskItem: TaskItem) => await requests.post<TaskItem>('/taskitem/', taskItem),
     update: (taskItem: TaskItemFormValues) => requests.put<TaskItem>(`/taskitem/${taskItem.id}`, taskItem),
