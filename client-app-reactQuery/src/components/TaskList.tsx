@@ -16,27 +16,30 @@ export default function TaskList() {
   const month = params!.month!;
   const year = params!.year!;
   const defaultDate = new Date();
+
   const { tasks, isLoading } = useTasks(year, month, sortbyValue);
 
-  function getDistinctHidtas(tasks: TaskItem[] | undefined) {
-    if (!tasks) return null;
+  console.log('sortbyValue',sortbyValue)
 
-    const hidtas = tasks?.map((x) => x.hidta).sort() as string[];
-    const distinctHidtas = getDistinct(hidtas).reduce(
-      (acc, curr) => acc + curr + ', ',
-      ''
-    );
+  // function getDistinctHidtas(tasks: TaskItem[] | undefined) {
+  //   if (!tasks) return null;
 
-    return distinctHidtas.substring(0, distinctHidtas.length - 2);
-  }
+  //   const hidtas = tasks?.map((x) => x.hidta).sort() as string[];
+  //   const distinctHidtas = getDistinct(hidtas).reduce(
+  //     (acc, curr) => acc + curr + ', ',
+  //     ''
+  //   );
 
-  function getDistinct(items: string[] | undefined) {
-    const distinctItems = [];
-    for (const item of items!) {
-      if (distinctItems.indexOf(item) === -1) distinctItems.push(item);
-    }
-    return distinctItems;
-  }
+  //   return distinctHidtas.substring(0, distinctHidtas.length - 2);
+  // }
+
+  // function getDistinct(items: string[] | undefined) {
+  //   const distinctItems = [];
+  //   for (const item of items!) {
+  //     if (distinctItems.indexOf(item) === -1) distinctItems.push(item);
+  //   }
+  //   return distinctItems;
+  // }
 
   if (isLoading)
     return (
@@ -59,7 +62,7 @@ export default function TaskList() {
               </button>
             </Modal.Open>
             <Modal.Window name="add" $size="medium">
-              <TaskItemForm defaultDate={defaultDate}></TaskItemForm>
+              <TaskItemForm defaultDate={defaultDate} sortbyValue={sortbyValue}></TaskItemForm>
             </Modal.Window>
           </Modal>
           <Modal>
@@ -84,7 +87,7 @@ export default function TaskList() {
                   ></SortBySelector>
                 </Table.Cell>
                 <Table.Cell>
-                <SortBySelector
+                  <SortBySelector
                     label="HIDTA"
                     value="hidta"
                     currentSortValue={sortbyValue}
@@ -92,7 +95,7 @@ export default function TaskList() {
                   ></SortBySelector>
                 </Table.Cell>
                 <Table.Cell>
-                <SortBySelector
+                  <SortBySelector
                     label="Project"
                     value="project"
                     currentSortValue={sortbyValue}
@@ -100,7 +103,7 @@ export default function TaskList() {
                   ></SortBySelector>
                 </Table.Cell>
                 <Table.Cell>
-                <SortBySelector
+                  <SortBySelector
                     label="Requestor"
                     value="requestor"
                     currentSortValue={sortbyValue}

@@ -23,9 +23,15 @@ interface Props {
   taskItem?: TaskItem;
   onAdded?: () => void;
   defaultDate?: Date | null;
+  sortbyValue: string;
 }
 
-const TaskItemForm = ({ taskItem, onAdded, defaultDate }: Props) => {
+const TaskItemForm = ({
+  taskItem,
+  onAdded,
+  defaultDate,
+  sortbyValue,
+}: Props) => {
   const context = useModalContext();
   const [hidtaId, setHidtaId] = useState(() => {
     if (taskItem) return taskItem.hidtaId;
@@ -40,7 +46,7 @@ const TaskItemForm = ({ taskItem, onAdded, defaultDate }: Props) => {
   const { hidtas, loadingHidtas } = useHidtas();
   const { requestors, loadingRequestors } = useRequestors(hidtaId);
   const { projects, loadingProjects } = useProjects();
-  const { isCreating, created, createTask } = useCreateTask();
+  const { isCreating, created, createTask } = useCreateTask(sortbyValue);
   const { isUpdating, updated, updateTask } = useUpdateTask();
 
   const updatedRequestors = requestors

@@ -1,33 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TaskItem, TaskItemFormValues } from "../models/TaskItem";
 import agent from "./agent";
-// import { Hidta } from "../models/Hidta";
-// import { Project } from "../models/Project";
 
-export function useCreateTask() {
+export function useCreateTask(sortbyValue: string) {
     const queryClient = useQueryClient();
 
     const { mutate: createTask, isPending: isCreating, isSuccess: created } = useMutation({
         mutationFn: (taskItem: TaskItemFormValues) => _createTask(taskItem),
         onSuccess: (newTask: TaskItem) => {
-
-
             const date = newTask.taskDate;
             const month = date!.getMonth() + 1;
             const year = date?.getFullYear();
 
-            queryClient.invalidateQueries({ queryKey: [`tasks${year}${month}`] });
-
-            // const hidtas = queryClient.getQueryData<Hidta[]>(['hidtas'])
-            // const projects = queryClient.getQueryData<Project[]>(['projects']);
-
-
-            // newTask = {
-            //     ...newTask,
-            //     hidta: hidtas!.find((x) => x.id === newTask.hidtaId)?.name,
-            //     project: projects!.find((x) => x.id == newTask.projectId)?.name,
-            // };
-
+            queryClient.invalidateQueries(
+                { queryKey: [`tasks${year}${month}${sortbyValue}`] });
         }
 
     });
@@ -37,8 +23,6 @@ export function useCreateTask() {
 
 
 async function _createTask(values: TaskItemFormValues) {
-
-
     const shapedTask =
         values.requestorName?.trim() !== ''
             ? {
